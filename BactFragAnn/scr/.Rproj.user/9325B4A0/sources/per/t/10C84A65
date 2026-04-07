@@ -1,0 +1,28 @@
+{
+    "id": "10C84A65",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1774024247059.0,
+    "source_on_save": false,
+    "relative_order": 26,
+    "properties": {
+        "id": "b31284ca75e841e59861061f82139a15",
+        "name": "hub",
+        "title": "hub",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 0,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1774024247059,
+    "read_only": false,
+    "read_only_alternatives": []
+}

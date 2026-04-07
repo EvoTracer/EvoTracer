@@ -1,0 +1,26 @@
+{
+    "id": "2499F9EF",
+    "path": "~/工作数据存放/202602214-ag_function_enrich/scr/2-ecoli_go_batch_file11.R",
+    "project_path": "2-ecoli_go_batch_file11.R",
+    "type": "r_source",
+    "hash": "2642989629",
+    "contents": "",
+    "dirty": false,
+    "created": 1774006382649.0,
+    "source_on_save": false,
+    "relative_order": 9,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "8,34",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1774006440,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1774006440126,
+    "read_only": false,
+    "read_only_alternatives": []
+}
