@@ -1,0 +1,28 @@
+{
+    "id": "716E79B4",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1774020883532.0,
+    "source_on_save": false,
+    "relative_order": 21,
+    "properties": {
+        "id": "c10cb49939de42e985abe0793869fd17",
+        "name": "query_res",
+        "title": "query_res",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 0,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1774020883532,
+    "read_only": false,
+    "read_only_alternatives": []
+}

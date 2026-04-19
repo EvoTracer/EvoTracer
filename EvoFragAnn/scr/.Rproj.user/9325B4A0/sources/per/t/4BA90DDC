@@ -1,0 +1,28 @@
+{
+    "id": "4BA90DDC",
+    "path": null,
+    "project_path": null,
+    "type": "object_explorer",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1774007391336.0,
+    "source_on_save": false,
+    "relative_order": 15,
+    "properties": {
+        "id": "0c1b71fbc2ba4e3c8fc645dc251a13f4",
+        "name": "accessory_go_rich",
+        "title": "accessory_go_rich",
+        "language": "R",
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 0,
+    "encoding": "",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1774007391336,
+    "read_only": false,
+    "read_only_alternatives": []
+}

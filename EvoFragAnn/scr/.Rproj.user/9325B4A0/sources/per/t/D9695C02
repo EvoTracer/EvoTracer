@@ -1,0 +1,26 @@
+{
+    "id": "D9695C02",
+    "path": "~/工作数据存放/202602214-ag_function_enrich/input/LT2_background_TERM2GENE.csv",
+    "project_path": null,
+    "type": "text",
+    "hash": "3418812033",
+    "contents": "",
+    "dirty": false,
+    "created": 1774060228391.0,
+    "source_on_save": false,
+    "relative_order": 31,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "23764,0",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1774060141,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1774060141,
+    "read_only": false,
+    "read_only_alternatives": []
+}
