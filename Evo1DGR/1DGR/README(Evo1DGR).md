@@ -18,7 +18,7 @@ pip install -e ./OneDGR
 **方式一：使用全局快捷命令（推荐，需先完成安装）**
 
 ```bash
-onedgr obYMMbN --bactid /home/hcd/1DGR/bactID.txt -f /home/hcd/AG/output -o MyResults -w 8
+onedgr obYMMbN --Evoid /home/hcd/1DGR/EvoID.txt -f /home/hcd/AG/output -o MyResults -w 8
 ```
 
 **方式二：通过 Python 脚本直接运行**
@@ -26,13 +26,13 @@ onedgr obYMMbN --bactid /home/hcd/1DGR/bactID.txt -f /home/hcd/AG/output -o MyRe
 在使用此方式前，请确保您当前的工作目录位于包含 `OneDGR/run_onedgr.py` 的父目录下：
 
 ```bash
-python OneDGR/run_onedgr.py obYMMbN --bactid /home/hcd/1DGR/bactID.txt -f /home/hcd/AG/output -o MyResults -w 8
+python OneDGR/run_onedgr.py obYMMbN --Evoid /home/hcd/1DGR/EvoID.txt -f /home/hcd/AG/output -o MyResults -w 8
 ```
 
 ## 参数说明
 
 - `obYMMbN`:输入感兴趣的古代基因组ID
-- `--bactid`: BactAG获得的古基因组生成关系（例如：`/home/hcd/1DGR/bactID.txt`）。
+- `--Evoid`: EvoAG获得的古基因组生成关系（例如：`/home/hcd/1DGR/EvoID.txt`）。
 - `-f`: 指定输入文件夹路径（例如：`/home/hcd/AG/output`）。
 - `-o`: 指定输出结果保存的目录名称或前缀（此处为 `MyResults`）。
 - `-w`: 指定运行的线程数或工作进程数（此处为 `8`，表示使用 8 个线程以加速计算）。
@@ -40,7 +40,7 @@ python OneDGR/run_onedgr.py obYMMbN --bactid /home/hcd/1DGR/bactID.txt -f /home/
 ## 注意事项
 
 - 运行此命令前，请确保您当前的工作目录位于包含 `OneDGR/run_onedgr.py` 的父目录下。
-- 请检查 `--bactid` 和 `-f` 提供的绝对路径在您的文件系统中是否真实存在且具有读取权限。
+- 请检查 `--Evoid` 和 `-f` 提供的绝对路径在您的文件系统中是否真实存在且具有读取权限。
 - 确保已配置好运行所需的 Python 环境及相关依赖。
 
 ---
@@ -65,7 +65,7 @@ Once successfully installed, the system will register a global command `onedgr`,
 **Method 1: Using the global command (Recommended, requires installation first)**
 
 ```bash
-onedgr obYMMbN --bactid /home/hcd/1DGR/bactID.txt -f /home/hcd/AG/output -o MyResults -w 8
+onedgr obYMMbN --Evoid /home/hcd/1DGR/EvoID.txt -f /home/hcd/AG/output -o MyResults -w 8
 ```
 
 **Method 2: Running the Python script directly**
@@ -73,13 +73,13 @@ onedgr obYMMbN --bactid /home/hcd/1DGR/bactID.txt -f /home/hcd/AG/output -o MyRe
 Before using this method, ensure your current working directory is the parent directory containing `OneDGR/run_onedgr.py`:
 
 ```bash
-python OneDGR/run_onedgr.py obYMMbN --bactid /home/hcd/1DGR/bactID.txt -f /home/hcd/AG/output -o MyResults -w 8
+python OneDGR/run_onedgr.py obYMMbN --Evoid /home/hcd/1DGR/EvoID.txt -f /home/hcd/AG/output -o MyResults -w 8
 ```
 
 ## Parameters 
 
 - `obYMMbN`: Input the ancient genome ID of interest.
-- `--bactid`: The ancient genome generation relationship obtained by BactAG (e.g., `/home/hcd/1DGR/bactID.txt`).
+- `--Evoid`: The ancient genome generation relationship obtained by EvoAG (e.g., `/home/hcd/1DGR/EvoID.txt`).
 - `-f`: Specify the input folder path (e.g., `/home/hcd/AG/output`).
 - `-o`: Specify the output directory name or prefix (here it is `MyResults`).
 - `-w`: Specify the number of threads or worker processes to run (here it is `8`, meaning 8 threads are used to accelerate computation).
@@ -87,5 +87,5 @@ python OneDGR/run_onedgr.py obYMMbN --bactid /home/hcd/1DGR/bactID.txt -f /home/
 ## Notes
 
 - Before running this command natively using Python, ensure your current working directory is the parent directory of `OneDGR/run_onedgr.py`.
-- Please check that the absolute paths provided for `--bactid` and `-f` actually exist in your file system and have read permissions.
+- Please check that the absolute paths provided for `--Evoid` and `-f` actually exist in your file system and have read permissions.
 - Ensure the required Python environment is properly configured.
