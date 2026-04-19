@@ -12,22 +12,19 @@ import subprocess
 # ================= 1. 全局配置区域 =================
 
 # 根节点文件定义
-ROOT_NODE = "aEC"
+ROOT_NODE = "S.enterica_subsp.enterica_AOG"
 ROOT_FASTA = f"{ROOT_NODE}.fasta"
-ROOT_GFF = f"{ROOT_NODE}.gff"
 
-# 演化树结构 (Parent -> Child)
+# 演化树结构 (Parent -> Child) 此处用户进行修改
 EVOLUTION_TREE = [
-    ("aEC", "aEC1"), ("aEC1", "aB2G"), ("aEC1", "aAB1EFD"),
-    ("aB2G", "aG"), ("aB2G", "aB2"), ("aAB1EFD", "aD"),
-    ("aAB1EFD", "aAB1EF"), ("aAB1EF", "aAB1E"), ("aAB1E", "aE"),
-    ("aAB1E", "aAB1"), ("aAB1", "aB1"), ("aAB1", "aA")
+    ("S.enterica_subsp.enterica_AOG", "mA"), ("S.enterica_subsp.enterica_AOG", "mB"), ("mB", "mC"),
+    ("mC", "mD"), ("mD", "mF"), ("mD", "mE"),
 ]
 
 # 输出目录
 OUTPUT_DIR = "Final_Large_SV_Analysis"
 
-# [新增] 最小事件长度阈值
+# 最小事件长度阈值
 MIN_EVENT_LENGTH = 1000 
 
 # ================= 2. 基础工具函数 =================
@@ -36,50 +33,68 @@ def ensure_dir(d):
     """创建输出目录"""
     if not os.path.exists(d): os.makedirs(d)
 
-def parse_gff_all_features(gff_file):
-    """解析 GFF 文件 (Genes & tRNAs)"""
-    genes_db = []
-    trnas_db = []
-    
-    if not os.path.exists(gff_file): return [], []
-    
-    with open(gff_file, 'r') as f:
-        for line in f:
-            if line.startswith("#") or not line.strip(): continue
-            parts = line.strip().split('\t')
-            if len(parts) < 9: continue
-            
-            feature_type = parts[2]
-            try:
-                start, end = int(parts[3]), int(parts[4])
-            except ValueError:
-                continue
-            
-            info = parts[8]
-            name = "unknown"
-            if "Name=" in info: name = info.split("Name=")[1].split(";")[0]
-            elif "ID=" in info: name = info.split("ID=")[1].split(";")[0]
-            elif "gene=" in info: name = info.split("gene=")[1].split(";")[0]
-            elif "product=" in info: name = info.split("product=")[1].split(";")[0]
-            
-            record = {'start': start, 'end': end, 'name': name}
-            
-            if feature_type in ['gene', 'CDS']:
-                genes_db.append(record)
-            if feature_type == 'tRNA':
-                trnas_db.append(record)
-                
-    return genes_db, trnas_db
+gbk_cache = {}
 
-def find_overlapping_genes(event_start, event_end, genes_db):
-    """查找落在事件区间内的所有基因"""
-    hit_genes = set()
-    for g in genes_db:
-        if max(event_start, g['start']) <= min(event_end, g['end']):
-            hit_genes.add(g['name'])
+def get_affected_genes_by_sequence(target_node, query_seq):
+    gbk_file = f"{target_node}.gbk"
+    if not os.path.exists(gbk_file): 
+        return "GBK not found"
     
-    if not hit_genes: return "Intergenic"
-    return "; ".join(sorted(list(hit_genes)))
+    if target_node not in gbk_cache:
+        try:
+            gbk_cache[target_node] = SeqIO.read(gbk_file, "genbank")
+        except Exception:
+            gbk_cache[target_node] = None
+            
+    record = gbk_cache[target_node]
+    if record is None:
+        return "GBK parse error"
+        
+    genome_seq = str(record.seq).upper()
+    query_seq = query_seq.upper().replace("-", "")
+    
+    if not query_seq:
+        return "Empty Sequence"
+        
+    idx = genome_seq.find(query_seq)
+    if idx == -1:
+        from Bio.Seq import Seq
+        rev_seq = str(Seq(query_seq).reverse_complement())
+        idx = genome_seq.find(rev_seq)
+        if idx == -1:
+            return "Sequence not found in GBK"
+            
+    start_pos = idx
+    end_pos = idx + len(query_seq)
+    
+    affected = set()
+    for feature in record.features:
+        if feature.type in ["gene", "CDS", "tRNA", "rRNA"]:
+            f_start = int(feature.location.start)
+            f_end = int(feature.location.end)
+            if max(start_pos, f_start) < min(end_pos, f_end):
+                q = feature.qualifiers
+                
+                gene_name = q.get("gene", [""])[0]
+                product = q.get("product", [""])[0]
+                prot_id = q.get("protein_id", [""])[0]
+                
+                # 优先选用有意义的标识，筛除 pgaptmp_ 系列临时无意义编号
+                name = "unknown"
+                if gene_name and not gene_name.startswith("pgaptmp"):
+                    name = gene_name
+                elif product and product.lower() != "hypothetical protein":
+                    name = product
+                elif prot_id:
+                    name = prot_id
+                elif product:
+                    name = product
+                    
+                affected.add(name)
+                
+    if not affected:
+        return "Intergenic"
+    return "; ".join(sorted(list(affected)))
 
 def run_mauve_3way(root, parent, child, out):
     """运行 3-way Mauve 比对"""
@@ -216,9 +231,6 @@ def main():
         return
     root_len = len(SeqIO.read(ROOT_FASTA, "fasta").seq)
     
-    print(f"Parsing GFF: {ROOT_GFF}")
-    genes_db, trna_list = parse_gff_all_features(ROOT_GFF)
-    
     all_events_filtered = [] 
     csv_records = []           
     
@@ -248,8 +260,16 @@ def main():
             count_pass += 1
             all_events_filtered.append(e) # 用于绘图
             
+            # 使用 Sequence 到对应节点的 GBK 文件寻找相交基因
+            affected_genes = "N/A"
+            if e['type'] == 'Deletion':
+                # Deleted sequence is present in parent.gbk
+                affected_genes = get_affected_genes_by_sequence(parent, seq)
+            elif e['type'] == 'Insertion':
+                # Inserted sequence is present in child.gbk
+                affected_genes = get_affected_genes_by_sequence(child, seq)
+            
             # CSV 记录
-            affected = find_overlapping_genes(s, e_end, genes_db)
             csv_records.append({
                 'Parent': parent,
                 'Child': child,
@@ -259,7 +279,7 @@ def main():
                 'Ref_Length_EC': max(0, e_end - s),
                 'Actual_Seq_Length': actual_len, # 实际变异长度
                 'Sequence': seq,
-                'Affected_Genes': affected
+                'Affected_Genes': affected_genes
             })
         print(f"  Found {len(raw_events)} events -> {count_pass} passed filter (> {MIN_EVENT_LENGTH}bp).")
 
@@ -302,13 +322,7 @@ def main():
                      color='#377eb8', alpha=0.6, linewidth=0)
     plt.step(x_axis, y_axis, where='post', color='#377eb8', linewidth=0.5)
 
-    # B. 绘制 tRNA (墨绿色, 加粗)
-    if trna_list:
-        max_y = np.max(y_axis) if len(y_axis) > 0 else 5
-        trna_starts = [t['start'] for t in trna_list]
-        trna_heights = [max_y * 0.15] * len(trna_list)
-        plt.bar(trna_starts, trna_heights, width=4000, 
-                color='#006400', align='center', alpha=1.0, zorder=4)
+    # 舍弃 tRNA 绘制
 
     # C. 阈值线
     plt.axhline(y=1, color='red', linestyle='--', linewidth=1.5, zorder=3)
@@ -320,14 +334,16 @@ def main():
     
     ax = plt.gca()
     ax.xaxis.set_major_formatter(ticker.FuncFormatter(lambda x, p: format(int(x), ',')))
+    # Y 轴使用整数刻度
+    ax.yaxis.set_major_locator(ticker.MaxNLocator(integer=True))
+    ax.yaxis.set_major_formatter(ticker.FormatStrFormatter('%d'))
     plt.xlim(0, root_len)
     plt.ylim(bottom=0)
     
     # 图例
     blue_patch = mpatches.Patch(color='#377eb8', alpha=0.6, label=f'Large SV Count (>{MIN_EVENT_LENGTH}bp)')
-    green_patch = mpatches.Patch(color='#006400', label='tRNA Sites')
-    red_line = Line2D([0], [0], color='red', linestyle='--', linewidth=1.5, label='Threshold = 2')
-    plt.legend(handles=[blue_patch, green_patch, red_line], loc='upper right', fontsize=12)
+    red_line = Line2D([0], [0], color='red', linestyle='--', linewidth=1.5, label='Threshold = 1')
+    plt.legend(handles=[blue_patch, red_line], loc='upper right', fontsize=12)
     
     plt.tight_layout()
     
