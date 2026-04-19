@@ -1,1 +1,0 @@
-python OneDGR/run_onedgr.py obYMMbN --bactid /home/wangyiwei/1DGR/bactID.txt -f /home/wangyiwei/1DGR/output -o MyResults -w 8
