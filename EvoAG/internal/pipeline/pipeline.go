@@ -1,7 +1,7 @@
 package pipeline
 
 import (
-	"bactag/internal/tools"
+	"Evoag/internal/tools"
 	"fmt"
 	"io"
 	"os"
@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-// Pipeline struct holds configuration for the BactAG run
+// Pipeline struct holds configuration for the EvoAG run
 type Pipeline struct {
 	NumThreads int
 	GeneDir    string
@@ -108,8 +108,8 @@ func (p *Pipeline) runPipelineCmd(dir, cmdStr string, logger io.Writer) error {
 	return nil
 }
 
-// RunBactAG1 executes the logic for BactAG1 integration
-func (p *Pipeline) RunBactAG1(input1, input2, input3, output string) error {
+// RunEvoAG1 executes the logic for EvoAG1 integration
+func (p *Pipeline) RunEvoAG1(input1, input2, input3, output string) error {
 	processDir := filepath.Join(p.TempDir, output)
 	os.MkdirAll(processDir, 0755)
 
@@ -135,7 +135,7 @@ func (p *Pipeline) RunBactAG1(input1, input2, input3, output string) error {
 	defer logFile.Close()
 
 	// Redirect output locally (simplified for demonstration)
-	fmt.Fprintf(logFile, "Starting BactAG1 for %s, %s, %s -> %s\n", input1, input2, input3, output)
+	fmt.Fprintf(logFile, "Starting EvoAG1 for %s, %s, %s -> %s\n", input1, input2, input3, output)
 
 	// Example: (1) AG backbone inference and refinement
 	fmt.Println("(1) AG backbone inference and refinement ...")
@@ -229,8 +229,8 @@ func (p *Pipeline) RunBactAG1(input1, input2, input3, output string) error {
 	return nil
 }
 
-// RunBactAG2 executes the extended logic for BactAG2
-func (p *Pipeline) RunBactAG2(input1, input2, input3, input4, output string) error {
+// RunEvoAG2 executes the extended logic for EvoAG2
+func (p *Pipeline) RunEvoAG2(input1, input2, input3, input4, output string) error {
 processDir := filepath.Join(p.TempDir, output)
 os.MkdirAll(processDir, 0755)
 
@@ -252,7 +252,7 @@ return err
 }
 defer logFile.Close()
 
-fmt.Fprintf(logFile, "Starting BactAG2 for %s, %s, %s, %s -> %s\n", input1, input2, input3, input4, output)
+fmt.Fprintf(logFile, "Starting EvoAG2 for %s, %s, %s, %s -> %s\n", input1, input2, input3, input4, output)
 
 fmt.Println("(1) AG backbone inference and refinement ...")
 
@@ -325,7 +325,7 @@ orthoFileIter2 := filepath.Join(processDir, fmt.Sprintf("Houtenae_BG2_ORTH%s.txt
 outFastaIter2 := filepath.Join(processDir, fmt.Sprintf("Houtenae_BG2_ORTH%s.fasta", output))
 tools.ExtractSequences(input2, filepath.Join(processDir, input2+".fasta"), input1, filepath.Join(processDir, input1+".fasta"), orthoFileIter2, outFastaIter2)
 
-// NEXT EXTENSION FOR BACTAG2
+// NEXT EXTENSION FOR EvoAG2
 fmt.Println("1-st round Alignment (Part 2) ...")
 p.runPipelineCmd(processDir, fmt.Sprintf("progressiveMauve --output=%s.vs.Houtenae_BG2_ORTH%s.xmfa --output-guide-tree=%s.vs.Houtenae_BG2_ORTH%s.guide_tree --backbone-output=%s.vs.Houtenae_BG2_ORTH%s.backbone %s.fasta Houtenae_BG2_ORTH%s.fasta", input1, output, input1, output, input1, output, input1, output, logFile))
 p.runPipelineCmd(processDir, fmt.Sprintf("progressiveMauve --output=%s.vs.%s.xmfa --output-guide-tree=%s.vs.%s.guide_tree --backbone-output=%s.vs.%s.backbone %s.fasta %s.fasta", input1, input4, input1, input4, input1, input4, input1, input4, logFile))

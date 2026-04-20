@@ -16,8 +16,8 @@ var (
 refStrain string
 cdHitC    string
 cdHitS    string
-bactCG1   string
-bactCG2   string
+EvoCG1   string
+EvoCG2   string
 inputDirRun  string
 outputDirRun string
 )
@@ -25,7 +25,7 @@ outputDirRun string
 var runCmd = &cobra.Command{
 Use:   "run",
 Short: "Run the full pipeline with CD-HIT, BLAST, and optionally QC filtering",
-Long:  `Executes the main BactCG pipeline. Integrates QC, CD-HIT redundancy clustering, and BactCG computation.`,
+Long:  `Executes the main EvoCG pipeline. Integrates QC, CD-HIT redundancy clustering, and EvoCG computation.`,
 Run: func(cmd *cobra.Command, args []string) {
 if !checkDependencies() {
 os.Exit(1)
@@ -78,14 +78,14 @@ newFaaFileName := filepath.Join(out2, baseName+".fasta")
 copyFile(outFile, newFaaFileName)
 }
 
-fmt.Println("Proceeding with BactCG execution...")
+fmt.Println("Proceeding with EvoCG execution...")
 // Running the cg sub-command natively via os.Args[0] (the executable itself)
 exePath, _ := os.Executable()
-cgCmd := exec.Command(exePath, "cg", out2, refStrain, bactCG1, bactCG2)
+cgCmd := exec.Command(exePath, "cg", out2, refStrain, EvoCG1, EvoCG2)
 cgCmd.Stdout = os.Stdout
 cgCmd.Stderr = os.Stderr
 if err := cgCmd.Run(); err != nil {
-fmt.Printf("Error running BactCG: %v\n", err)
+fmt.Printf("Error running EvoCG: %v\n", err)
 }
 
 // Copy result and clean up
@@ -105,11 +105,11 @@ fmt.Println("Pipeline execution finished.")
 
 func init() {
 rootCmd.AddCommand(runCmd)
-runCmd.Flags().StringVarP(&refStrain, "ref", "r", "NRRL_3357", "Reference strain name for BactCG")
+runCmd.Flags().StringVarP(&refStrain, "ref", "r", "NRRL_3357", "Reference strain name for EvoCG")
 runCmd.Flags().StringVar(&cdHitC, "cd-c", "0.7", "CD-HIT sequence identity threshold (-c)")
 runCmd.Flags().StringVar(&cdHitS, "cd-s", "0.7", "CD-HIT length difference cutoff (-s)")
-runCmd.Flags().StringVar(&bactCG1, "cg1", "0.8", "BactCG first parameter")
-runCmd.Flags().StringVar(&bactCG2, "cg2", "0.9", "BactCG second parameter")
+runCmd.Flags().StringVar(&EvoCG1, "cg1", "0.8", "EvoCG first parameter")
+runCmd.Flags().StringVar(&EvoCG2, "cg2", "0.9", "EvoCG second parameter")
 runCmd.Flags().StringVarP(&inputDirRun, "input", "i", "input/seq/prot_file/", "Input directory of protein files")
 runCmd.Flags().StringVarP(&outputDirRun, "output", "o", "output/CG_results/", "Output directory for the results")
 }

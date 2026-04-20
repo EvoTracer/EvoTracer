@@ -1191,7 +1191,7 @@ func mainPG(args []string) {
 		return
 	}
 	// 判断结果文件夹是否存在，是否删除结果文件夹
-	fmt.Println("*******Make sure to remove the `result` folder before running the BactPG2.0*******")
+	fmt.Println("*******Make sure to remove the `result` folder before running the EvoPG2.0*******")
 	var Yes_No string
 	_, err := os.Stat("./result")
 	if err == nil {

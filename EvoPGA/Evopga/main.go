@@ -16,7 +16,7 @@ func main() {
 	case "parse":
 		parseCmd := flag.NewFlagSet("parse", flag.ExitOnError)
 		if err := parseCmd.Parse(os.Args[2:]); err != nil || parseCmd.NArg() < 1 {
-			fmt.Println("Usage: bactpga parse <genbank.gb>")
+			fmt.Println("Usage: Evopga parse <genbank.gb>")
 			os.Exit(1)
 		}
 		gbFileName := parseCmd.Arg(0)
@@ -31,7 +31,7 @@ func main() {
 		seqDir := annotateCmd.String("seqDir", "", "(Optional) Directory containing .faa sequences to count total alignments. Default will guess by files in mutbestDir.")
 		
 		if err := annotateCmd.Parse(os.Args[2:]); err != nil {
-			fmt.Println("Usage: bactpga annotate -pg <pg.txt> -tab <ag.tab> -mode <PGAG|RAST> -strain <strain> [options]")
+			fmt.Println("Usage: Evopga annotate -pg <pg.txt> -tab <ag.tab> -mode <PGAG|RAST> -strain <strain> [options]")
 			os.Exit(1)
 		}
 		if *pgFile == "" || *agFile == "" || *mode == "" || *strain == "" {
@@ -50,12 +50,12 @@ func main() {
 }
 
 func printUsage() {
-	fmt.Println("BactPGA - A combined tool for parsing GenBank and annotating Salmonella PG UIDs")
+	fmt.Println("EvoPGA - A combined tool for parsing GenBank and annotating Salmonella PG UIDs")
 	fmt.Println("\nUsage:")
-	fmt.Println("  bactpga <command> [arguments]")
+	fmt.Println("  Evopga <command> [arguments]")
 	fmt.Println("\nCommands:")
 	fmt.Println("  parse     Extract features (CDS, rRNA, etc.) from GenBank files (.gbk/.gb)")
 	fmt.Println("  annotate  Annotate gene tables with Salmonella PG UID using mutual best hits")
 	fmt.Println("  pipeline  Run the complete automated pipeline (Parse -> CG -> Annotate)")
-	fmt.Println("\nRun 'bactpga <command> -h' for more details.")
+	fmt.Println("\nRun 'Evopga <command> -h' for more details.")
 }

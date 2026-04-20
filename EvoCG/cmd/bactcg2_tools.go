@@ -3,14 +3,14 @@ package cmd
 import (
     "os"
     "github.com/spf13/cobra"
-    "github.com/GenomEvo/BactCG/internal/cg"
-    "github.com/GenomEvo/BactCG/internal/bestpicker"
-    "github.com/GenomEvo/BactCG/internal/batchprot"
-    "github.com/GenomEvo/BactCG/internal/combsingle"
-    "github.com/GenomEvo/BactCG/internal/lenext"
-    "github.com/GenomEvo/BactCG/internal/mutbest"
-    "github.com/GenomEvo/BactCG/internal/protacc"
-    "github.com/GenomEvo/BactCG/internal/simcov"
+    "github.com/GenomEvo/EvoCG/internal/cg"
+    "github.com/GenomEvo/EvoCG/internal/bestpicker"
+    "github.com/GenomEvo/EvoCG/internal/batchprot"
+    "github.com/GenomEvo/EvoCG/internal/combsingle"
+    "github.com/GenomEvo/EvoCG/internal/lenext"
+    "github.com/GenomEvo/EvoCG/internal/mutbest"
+    "github.com/GenomEvo/EvoCG/internal/protacc"
+    "github.com/GenomEvo/EvoCG/internal/simcov"
 )
 
 func shiftArgs() {
@@ -24,7 +24,7 @@ func shiftArgs() {
 
 var cgCmd = &cobra.Command{
     Use:   "cg",
-    Short: "Run the original BactCG2.0 cg module",
+    Short: "Run the original EvoCG2.0 cg module",
     Run: func(cmd *cobra.Command, args []string) {
         shiftArgs()
         cg.RunCG()

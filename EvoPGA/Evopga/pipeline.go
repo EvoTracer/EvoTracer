@@ -14,14 +14,14 @@ func runPipeline(args []string) {
 	gbkFile := pipeCmd.String("gbk", "", "Path to the input GenBank file (.gbk) (required)")
 	pgFile := pipeCmd.String("pg", "", "Path to the Pan-Genome reference file (e.g. 26_PG.txt) (required)")
 	seqDir := pipeCmd.String("seq", "", "Directory containing reference protein .faa sequences (required)")
-	cgBin := pipeCmd.String("cg", "./BactCG1.0/CG", "Path to the CG alignment executable")
+	cgBin := pipeCmd.String("cg", "./EvoCG1.0/CG", "Path to the CG alignment executable")
 	mode := pipeCmd.String("mode", "PGAG", "Annotation mode: PGAG or RAST")
 	cov1 := pipeCmd.String("cov1", "0.7", "Coverage 1 for CG")
 	cov2 := pipeCmd.String("cov2", "0.7", "Coverage 2 for CG")
 	outDir := pipeCmd.String("out", "./output", "Output directory")
 
 	if err := pipeCmd.Parse(args); err != nil {
-		fmt.Println("Usage: bactpga pipeline -gbk <in.gbk> -pg <ref_PG.txt> -seq <ref_seq_dir> [options]")
+		fmt.Println("Usage: Evopga pipeline -gbk <in.gbk> -pg <ref_PG.txt> -seq <ref_seq_dir> [options]")
 		os.Exit(1)
 	}
 
